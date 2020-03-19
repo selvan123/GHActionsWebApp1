@@ -23,7 +23,7 @@ jobs:
     
     steps:
     - name: deploy to azure web app
-      uses: azure/appservice-actions/webapp@master
+      uses: azure/webapps-deploy@v1
       with: 
         app-name: dummywebsite
         publish-profile: ${{ secrets.azureWebAppPublishProfile }}
