@@ -38,7 +38,7 @@ jobs:
         with:
           buildCommand: dotnet build .
           testCommand: dotnet test .
-          projectKey: 1.0
+          projectKey: selvan123
           projectName: webapp
           sonarOrganisation: selvan123-github
           beginArguments: >
