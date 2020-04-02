@@ -20,31 +20,17 @@ env:
   DOTNET_VERSION: '3.1.100'           # set this to the dot net version to use
 
 jobs:
-  sonar-analysis:
+ sonarcloud:
     runs-on: ubuntu-latest
     steps:
-    - name: Setup .NET Core
-      uses: actions/setup-dotnet@v1
-      with:
-        dotnet-version: ${{ env.DOTNET_VERSION }} 
-
-    - name: Sonarscanner for dotnet
-      uses: Secbyte/dotnet-sonarscanner@v2.2
-      with:
-        buildCommand: dotnet build --configuration Release
-        #testCommand: dotnet test .
-        projectKey: selvan123
-        projectName: webapp
-        sonarOrganisation: selvan123-github
-        beginArguments: >
-            /d:sonar.verbose="true"
-            /d:sonar.cs.opencover.reportsPaths='"/path/to/coverage.xml","/path/to/coverage.2.xml"'
-            /d:sonar.coverage.exclusions='"**/*.cs","**/*.md"'
+    - uses: actions/checkout@v2
+    - name: SonarCloud Scan
+      uses: sonarsource/sonarcloud-github-action@master
       env:
-        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-  build-and-deploy:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        
+ build-and-deploy:
     runs-on: ubuntu-latest
     steps:
 
