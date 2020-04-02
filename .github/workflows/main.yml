@@ -23,11 +23,16 @@ jobs:
   sonar-analysis:
     runs-on: ubuntu-latest
     steps:
+    - name: Setup .NET Core
+      uses: actions/setup-dotnet@v1
+      with:
+        dotnet-version: ${{ env.DOTNET_VERSION }} 
+
     - name: Sonarscanner for dotnet
       uses: Secbyte/dotnet-sonarscanner@v2.2
       with:
-        buildCommand: dotnet build .
-        testCommand: dotnet test .
+        buildCommand: dotnet build --configuration Release
+        #testCommand: dotnet test .
         projectKey: selvan123
         projectName: webapp
         sonarOrganisation: selvan123-github
