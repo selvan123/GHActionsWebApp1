@@ -33,6 +33,22 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }} 
       
+      - name: Sonarscanner for dotnet
+        uses: Secbyte/dotnet-sonarscanner@v2.2
+        with:
+          buildCommand: dotnet build .
+          testCommand: dotnet test .
+          projectKey: selvan123-github
+          projectName: webapp
+          sonarOrganisation: selvan123
+          beginArguments: >
+              /d:sonar.verbose="true"
+              /d:sonar.cs.opencover.reportsPaths='"/path/to/coverage.xml","/path/to/coverage.2.xml"'
+              /d:sonar.coverage.exclusions='"**/*.cs","**/*.md"'
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       # Run dotnet build and publish
       - name: dotnet build and publish
         run: |
