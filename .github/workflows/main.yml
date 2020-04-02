@@ -20,6 +20,25 @@ env:
   DOTNET_VERSION: '3.1.100'           # set this to the dot net version to use
 
 jobs:
+  Sonar Analysis:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Sonarscanner for dotnet
+      uses: Secbyte/dotnet-sonarscanner@v2.2
+      with:
+        buildCommand: dotnet build .
+        testCommand: dotnet test .
+        projectKey: selvan123
+        projectName: webapp
+        sonarOrganisation: selvan123-github
+        beginArguments: >
+            /d:sonar.verbose="true"
+            /d:sonar.cs.opencover.reportsPaths='"/path/to/coverage.xml","/path/to/coverage.2.xml"'
+            /d:sonar.coverage.exclusions='"**/*.cs","**/*.md"'
+      env:
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
   build-and-deploy:
     runs-on: ubuntu-latest
     steps:
@@ -33,21 +52,7 @@ jobs:
         with:
           dotnet-version: ${{ env.DOTNET_VERSION }} 
       
-      - name: Sonarscanner for dotnet
-        uses: Secbyte/dotnet-sonarscanner@v2.2
-        with:
-          buildCommand: dotnet build .
-          testCommand: dotnet test .
-          projectKey: selvan123
-          projectName: webapp
-          sonarOrganisation: selvan123-github
-          beginArguments: >
-              /d:sonar.verbose="true"
-              /d:sonar.cs.opencover.reportsPaths='"/path/to/coverage.xml","/path/to/coverage.2.xml"'
-              /d:sonar.coverage.exclusions='"**/*.cs","**/*.md"'
-        env:
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      
       
       # Run dotnet build and publish
       - name: dotnet build and publish
